@@ -119,6 +119,11 @@ static inline dispatch_queue_t YYImageCacheDecodeQueue() {
     [self setImage:image imageData:nil forKey:key withType:YYImageCacheTypeAll];
 }
 
+- (void)setImage:(UIImage *)image forKey:(NSString *)key withType:(YYImageCacheType)type {
+
+    [self setImage:image imageData:nil forKey:key withType:type];
+}
+
 - (void)setImage:(UIImage *)image imageData:(NSData *)imageData forKey:(NSString *)key withType:(YYImageCacheType)type {
     if (!key || (image == nil && imageData.length == 0)) return;
     

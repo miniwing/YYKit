@@ -41,12 +41,15 @@ YYSYNTH_DUMMY_CLASS(NSArray_YYAdd)
     return nil;
 }
 
+#if __has_include(<FoundationExtension/FoundationExtension.h>) || __has_include("FoundationExtension/FoundationExtension.h")
+#else
 - (id)randomObject {
     if (self.count) {
         return self[arc4random_uniform((u_int32_t)self.count)];
     }
     return nil;
 }
+#endif /* !__has_include(<FoundationExtension/FoundationExtension.h>) || __has_include("FoundationExtension/FoundationExtension.h") */
 
 - (id)objectOrNilAtIndex:(NSUInteger)index {
     return index < self.count ? self[index] : nil;
@@ -162,11 +165,14 @@ YYSYNTH_DUMMY_CLASS(NSArray_YYAdd)
     }
 }
 
+#if __has_include(<FoundationExtension/FoundationExtension.h>) || __has_include("FoundationExtension/FoundationExtension.h")
+#else
 - (void)shuffle {
     for (NSUInteger i = self.count; i > 1; i--) {
         [self exchangeObjectAtIndex:(i - 1)
                   withObjectAtIndex:arc4random_uniform((u_int32_t)i)];
     }
 }
+#endif /* !__has_include(<FoundationExtension/FoundationExtension.h>) || __has_include("FoundationExtension/FoundationExtension.h") */
 
 @end

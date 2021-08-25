@@ -13,6 +13,12 @@
 #import <QuartzCore/QuartzCore.h>
 #import "YYKitMacro.h"
 
+#if __has_include(<TYAlertController/TYAlertController.h>)
+#  import <TYAlertController/TYAlertController.h>
+#elif __has_include("TYAlertController/TYAlertController.h")
+#  import "TYAlertController/TYAlertController.h"
+#endif
+
 YYSYNTH_DUMMY_CLASS(UIView_YYAdd)
 
 
@@ -70,6 +76,9 @@ YYSYNTH_DUMMY_CLASS(UIView_YYAdd)
     }
 }
 
+#if __has_include(<TYAlertController/TYAlertController.h>)
+#elif __has_include("TYAlertController/TYAlertController.h")
+#else
 
 - (UIViewController *)viewController {
     for (UIView *view = self; view; view = view.superview) {
@@ -80,6 +89,8 @@ YYSYNTH_DUMMY_CLASS(UIView_YYAdd)
     }
     return nil;
 }
+
+#endif
 
 - (CGFloat)visibleAlpha {
     if ([self isKindOfClass:[UIWindow class]]) {

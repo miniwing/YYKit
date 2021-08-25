@@ -291,23 +291,57 @@ static inline bool dispatch_is_main_queue() {
 /**
  Submits a block for asynchronous execution on a main queue and returns immediately.
  */
-static inline void dispatch_async_on_main_queue(void (^block)()) {
+//static inline void dispatch_async_on_main_queue(void (^block)(void)) {
+//    if (pthread_main_np()) {
+//        block();
+//    } else {
+//        dispatch_async(dispatch_get_main_queue(), block);
+//    }
+//}
+
+//static inline void dispatch_async_on_main_queue(void (^block)(void)) {
+//    dispatch_async(dispatch_get_main_queue(), block);
+//}
+
+static inline void dispatch_async_on_main_queue(void (^block)(void)) {
     if (pthread_main_np()) {
-        block();
+                
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            
+            dispatch_async(dispatch_get_main_queue(), block);
+        });
+                
     } else {
         dispatch_async(dispatch_get_main_queue(), block);
     }
 }
-
 /**
  Submits a block for execution on a main queue and waits until the block completes.
  */
-static inline void dispatch_sync_on_main_queue(void (^block)()) {
+static inline void dispatch_sync_on_main_queue(void (^block)(void)) {
     if (pthread_main_np()) {
         block();
     } else {
         dispatch_sync(dispatch_get_main_queue(), block);
     }
+}
+
+/**
+Submits a block for asynchronous execution on a background queue and returns immediately.
+*/
+static inline void dispatch_async_on_background_queue(void (^block)(void)) {
+   
+   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), block);
+   return;
+}
+
+/**
+Submits a block for execution on a background queue and waits until the block completes.
+*/
+static inline void dispatch_sync_on_background_queue(void (^block)(void)) {
+   
+   dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), block);
+   return;
 }
 
 /**

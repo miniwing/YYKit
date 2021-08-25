@@ -117,6 +117,8 @@ typedef NS_OPTIONS(NSUInteger, YYImageCacheType) {
  */
 - (void)setImage:(UIImage *)image forKey:(NSString *)key;
 
+- (void)setImage:(UIImage *)image forKey:(NSString *)key withType:(YYImageCacheType)type;
+
 /**
  Sets the image with the specified key in the cache.
  This method returns immediately and executes the store operation in background.

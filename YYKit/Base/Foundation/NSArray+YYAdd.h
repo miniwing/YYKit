@@ -48,6 +48,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (nullable NSString *)plistString;
 
+#if __has_include(<FoundationExtension/FoundationExtension.h>) || __has_include("FoundationExtension/FoundationExtension.h")
+#else
 /**
  Returns the object located at a random index.
  
@@ -55,6 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
  If the array is empty, returns nil.
  */
 - (nullable ObjectType)randomObject;
+#endif /* !__has_include(<FoundationExtension/FoundationExtension.h>) || __has_include("FoundationExtension/FoundationExtension.h") */
 
 /**
  Returns the object located at index, or return nil when out of bounds.
@@ -186,10 +189,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)reverse;
 
+#if __has_include(<FoundationExtension/FoundationExtension.h>) || __has_include("FoundationExtension/FoundationExtension.h")
+#else
 /**
  Sort the object in this array randomly.
  */
 - (void)shuffle;
+#endif /* !__has_include(<FoundationExtension/FoundationExtension.h>) || __has_include("FoundationExtension/FoundationExtension.h") */
 
 @end
 

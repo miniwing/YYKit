@@ -250,6 +250,8 @@ static NSTimeInterval _yy_CGImageSourceGetGIFFrameDelayAtIndex(CGImageSourceRef 
     return [self imageWithColor:color size:CGSizeMake(1, 1)];
 }
 
+#if __has_include(<UIKitExtension/UIKitExtension.h>) || __has_include("UIKitExtension/UIKitExtension.h")
+#else
 + (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size {
     if (!color || size.width <= 0 || size.height <= 0) return nil;
     CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
@@ -261,6 +263,7 @@ static NSTimeInterval _yy_CGImageSourceGetGIFFrameDelayAtIndex(CGImageSourceRef 
     UIGraphicsEndImageContext();
     return image;
 }
+#endif /* !__has_include(<UIKitExtension/UIKitExtension.h>) || __has_include("UIKitExtension/UIKitExtension.h") */
 
 + (UIImage *)imageWithSize:(CGSize)size drawBlock:(void (^)(CGContextRef context))drawBlock {
     if (!drawBlock) return nil;
