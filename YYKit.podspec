@@ -45,9 +45,13 @@ Pod::Spec.new do |s|
                                           ]
                                       }
 
-  
-#  s.dependency 'FoundationExtension'
-#  s.dependency 'UIKitExtension'
+  if ENV['IDEA_FOUNDATION_EXTENSION'] == 'YES'
+    s.dependency 'FoundationExtension'
+  end # IDEA_FOUNDATION_EXTENSION
+
+  if ENV['IDEA_UIKIT_EXTENSION'] == 'YES'
+    s.dependency 'UIKitExtension'
+  end # IDEA_FOUNDATION_EXTENSION
 
 #  s.dependency 'AFNetworking'
 #  s.dependency 'RegexKitLite'
