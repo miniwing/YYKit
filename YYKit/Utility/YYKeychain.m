@@ -399,7 +399,7 @@ static YYKeychainQuerySynchronizationMode YYKeychainQuerySynchonizationEnum(NSNu
 }
 
 + (BOOL)deleteItem:(YYKeychainItem *)item error:(NSError **)error {
-    if (!item.service || !item.account) {
+    if (!item.service /* || !item.account */) {
         if (error) *error = [YYKeychain errorWithCode:errSecParam];
         return NO;
     }
