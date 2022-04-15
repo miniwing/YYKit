@@ -143,9 +143,18 @@ YYSYNTH_DUMMY_CLASS(NSDate_YYAdd)
 
 - (NSString *)stringWithFormat:(NSString *)format timeZone:(NSTimeZone *)timeZone locale:(NSLocale *)locale {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+      
     [formatter setDateFormat:format];
     if (timeZone) [formatter setTimeZone:timeZone];
-    if (locale) [formatter setLocale:locale];
+   
+    if (locale) {
+       [formatter setLocale:locale];
+    }
+    else {
+       if (@available(iOS 15.4, *)) {
+          formatter.locale = [NSLocale currentLocale];
+       } /* End if () */
+    }
     return [formatter stringFromDate:self];
 }
 
