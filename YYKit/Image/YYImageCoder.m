@@ -17,7 +17,7 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <objc/runtime.h>
-#import <pthread.h>
+#import <pthread/pthread.h>
 #import <zlib.h>
 #import "YYImage.h"
 #import "YYKitMacro.h"

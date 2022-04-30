@@ -42,8 +42,8 @@
             
             // for iOS 9:
             one.opaque = NO;
-            one.backgroundColor = [UIColor clearColor];
-            one.layer.backgroundColor = [UIColor clearColor].CGColor;
+            one.backgroundColor = UIColor.clearColor;
+            one.layer.backgroundColor = UIColor.clearColor.CGColor;
         }
     });
     return one;

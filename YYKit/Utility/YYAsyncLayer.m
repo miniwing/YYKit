@@ -150,7 +150,7 @@ static dispatch_queue_t YYAsyncLayerGetReleaseQueue() {
             if (opaque && context) {
                 CGContextSaveGState(context); {
                     if (!backgroundColor || CGColorGetAlpha(backgroundColor) < 1) {
-                        CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
+                        CGContextSetFillColorWithColor(context, UIColor.whiteColor.CGColor);
                         CGContextAddRect(context, CGRectMake(0, 0, size.width * scale, size.height * scale));
                         CGContextFillPath(context);
                     }
@@ -198,7 +198,7 @@ static dispatch_queue_t YYAsyncLayerGetReleaseQueue() {
             size.height *= self.contentsScale;
             CGContextSaveGState(context); {
                 if (!self.backgroundColor || CGColorGetAlpha(self.backgroundColor) < 1) {
-                    CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
+                    CGContextSetFillColorWithColor(context, UIColor.whiteColor.CGColor);
                     CGContextAddRect(context, CGRectMake(0, 0, size.width, size.height));
                     CGContextFillPath(context);
                 }

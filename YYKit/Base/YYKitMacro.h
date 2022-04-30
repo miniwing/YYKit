@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <sys/time.h>
-#import <pthread.h>
+#import <pthread/pthread.h>
 
 #ifndef YYKitMacro_h
 #define YYKitMacro_h

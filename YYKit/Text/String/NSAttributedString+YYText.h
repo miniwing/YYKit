@@ -1379,7 +1379,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)appendString:(NSString *)string;
 
 /**
- Set foreground color with [UIColor clearColor] in joined-emoji range.
+ Set foreground color with UIColor.clearColor in joined-emoji range.
  Emoji drawing will not be affected by the foreground color.
  
  @discussion In iOS 8.3, Apple releases some new diversified emojis. 

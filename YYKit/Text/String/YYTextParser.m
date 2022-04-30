@@ -107,7 +107,7 @@
 }
 
 - (void)setColorWithBrightTheme {
-    _textColor = [UIColor blackColor];
+    _textColor = UIColor.blackColor;
     _controlTextColor = [UIColor colorWithWhite:0.749 alpha:1.000];
     _headerTextColor = [UIColor colorWithRed:1.000 green:0.502 blue:0.000 alpha:1.000];
     _inlineTextColor = [UIColor colorWithWhite:0.150 alpha:1.000];
@@ -124,7 +124,7 @@
 }
 
 - (void)setColorWithDarkTheme {
-    _textColor = [UIColor whiteColor];
+    _textColor = UIColor.whiteColor;
     _controlTextColor = [UIColor colorWithWhite:0.604 alpha:1.000];
     _headerTextColor = [UIColor colorWithRed:0.558 green:1.000 blue:0.502 alpha:1.000];
     _inlineTextColor = [UIColor colorWithRed:1.000 green:0.862 blue:0.387 alpha:1.000];

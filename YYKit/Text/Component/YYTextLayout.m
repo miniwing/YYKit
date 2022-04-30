@@ -49,7 +49,7 @@ static CGColorRef YYTextGetCGColor(CGColorRef color) {
     static UIColor *defaultColor;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        defaultColor = [UIColor blackColor];
+        defaultColor = UIColor.blackColor;
     });
     if (!color) return defaultColor.CGColor;
     if ([((__bridge NSObject *)color) respondsToSelector:@selector(CGColor)]) {
@@ -3174,7 +3174,7 @@ static void YYTextDrawDebug(YYTextLayout *layout, CGContextRef context, CGSize s
                             CGContextFillPath(context);
                         }
                         CGContextSetBlendMode(context, kCGBlendModeDestinationOut);
-                        [[UIColor blackColor] setFill];
+                        [UIColor.blackColor setFill];
                         CGPathRef cgPath = CGPathCreateCopyByStrokingPath(path.CGPath, NULL, layout.container.pathLineWidth, kCGLineCapButt, kCGLineJoinMiter, 0);
                         if (cgPath) {
                             CGContextAddPath(context, cgPath);

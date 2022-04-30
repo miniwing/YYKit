@@ -1474,7 +1474,7 @@ typedef NS_ENUM(NSUInteger, YYTextMoveDirection) {
     
     UIColor *color = _innerText.color;
     if (!color) color = _typingAttributesHolder.color;
-    if (!color) color = [UIColor blackColor];
+    if (!color) color = UIColor.blackColor;
     
     [self _setText:[_innerText plainTextForRange:NSMakeRange(0, _innerText.length)]];
     [self _setFont:font];
@@ -3000,7 +3000,7 @@ typedef NS_ENUM(NSUInteger, YYTextMoveDirection) {
     if (!resign) return;
     
     UIReferenceLibraryViewController* ref = [[UIReferenceLibraryViewController alloc] initWithTerm:string];
-    ref.view.backgroundColor = [UIColor whiteColor];
+    ref.view.backgroundColor = UIColor.whiteColor;
     [[self _getRootViewController] presentViewController:ref animated:YES completion:^{}];
 }
 
@@ -3780,8 +3780,8 @@ typedef NS_ENUM(NSUInteger, YYTextMoveDirection) {
         self.debugOption = nil;
     } else {
         YYTextDebugOption *debugOption = [YYTextDebugOption new];
-        debugOption.baselineColor = [UIColor redColor];
-        debugOption.CTFrameBorderColor = [UIColor redColor];
+        debugOption.baselineColor = UIColor.redColor;
+        debugOption.CTFrameBorderColor = UIColor.redColor;
         debugOption.CTLineFillColor = [UIColor colorWithRed:0.000 green:0.463 blue:1.000 alpha:0.180];
         debugOption.CGGlyphBorderColor = [UIColor colorWithRed:1.000 green:0.524 blue:0.000 alpha:0.200];
         self.debugOption = debugOption;

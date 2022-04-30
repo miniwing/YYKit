@@ -346,7 +346,7 @@ static dispatch_queue_t YYLabelGetReleaseQueue() {
     _font = _innerText.font;
     if (!_font) _font = [self _defaultFont];
     _textColor = _innerText.color;
-    if (!_textColor) _textColor = [UIColor blackColor];
+    if (!_textColor) _textColor = UIColor.blackColor;
     _textAlignment = _innerText.alignment;
     _lineBreakMode = _innerText.lineBreakMode;
     NSShadow *shadow = _innerText.shadow;
@@ -395,7 +395,7 @@ static dispatch_queue_t YYLabelGetReleaseQueue() {
     [YYTextDebugOption addDebugTarget:self];
     
     _font = [self _defaultFont];
-    _textColor = [UIColor blackColor];
+    _textColor = UIColor.blackColor;
     _textVerticalAlignment = YYTextVerticalAlignmentCenter;
     _numberOfLines = 1;
     _textAlignment = NSTextAlignmentNatural;
@@ -416,7 +416,7 @@ static dispatch_queue_t YYLabelGetReleaseQueue() {
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:CGRectZero];
     if (!self) return nil;
-    self.backgroundColor = [UIColor clearColor];
+    self.backgroundColor = UIColor.clearColor;
     self.opaque = NO;
     [self _initLabel];
     self.frame = frame;
@@ -700,7 +700,7 @@ static dispatch_queue_t YYLabelGetReleaseQueue() {
 
 - (void)setTextColor:(UIColor *)textColor {
     if (!textColor) {
-        textColor = [UIColor blackColor];
+        textColor = UIColor.blackColor;
     }
     if (_textColor == textColor || [_textColor isEqual:textColor]) return;
     _textColor = textColor;
@@ -1303,8 +1303,8 @@ static dispatch_queue_t YYLabelGetReleaseQueue() {
         self.debugOption = nil;
     } else {
         YYTextDebugOption *debugOption = [YYTextDebugOption new];
-        debugOption.baselineColor = [UIColor redColor];
-        debugOption.CTFrameBorderColor = [UIColor redColor];
+        debugOption.baselineColor = UIColor.redColor;
+        debugOption.CTFrameBorderColor = UIColor.redColor;
         debugOption.CTLineFillColor = [UIColor colorWithRed:0.000 green:0.463 blue:1.000 alpha:0.180];
         debugOption.CGGlyphBorderColor = [UIColor colorWithRed:1.000 green:0.524 blue:0.000 alpha:0.200];
         self.debugOption = debugOption;
