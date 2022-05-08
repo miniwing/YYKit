@@ -40,9 +40,18 @@ YYSYNTH_DUMMY_CLASS(UIScrollView_YYAdd)
 }
 
 - (void)scrollToBottomAnimated:(BOOL)animated {
-    CGPoint off = self.contentOffset;
-    off.y = self.contentSize.height - self.bounds.size.height + self.contentInset.bottom;
-    [self setContentOffset:off animated:animated];
+   
+   CGPoint off = self.contentOffset;
+   
+   off.y = self.contentSize.height - self.bounds.size.height + self.contentInset.bottom;
+   
+   if (0 < off.y) {
+      
+      [self setContentOffset:off animated:animated];
+      
+   } /* End if () */
+   
+   return;
 }
 
 - (void)scrollToLeftAnimated:(BOOL)animated {
