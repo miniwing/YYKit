@@ -1834,7 +1834,7 @@ CGImageRef YYCGImageCreateWithWebPData(CFDataRef webpData,
     static const int line = __LINE__;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSLog(@"[%s: %d] WebP is not available, check the documentation to see how to install WebP component: https://github.com/ibireme/YYImage#installation", func, line);
+        NSLog(@"-[%s: %d] WebP is not available, check the documentation to see how to install WebP component: https://github.com/ibireme/YYImage#installation", func, line);
     });
 #endif
 }
@@ -2316,13 +2316,13 @@ CGImageRef YYCGImageCreateWithWebPData(CFDataRef webpData,
 
 - (instancetype)initWithType:(YYImageType)type {
     if (type == YYImageTypeUnknown || type >= YYImageTypeOther) {
-        NSLog(@"[%s: %d] Unsupported image type:%d",__FUNCTION__, __LINE__, (int)type);
+        NSLog(@"-[%s: %d] Unsupported image type:%d",__FUNCTION__, __LINE__, (int)type);
         return nil;
     }
     
 #if !YYIMAGE_WEBP_ENABLED
     if (type == YYImageTypeWebP) {
-        NSLog(@"[%s: %d] WebP is not available, check the documentation to see how to install WebP component: https://github.com/ibireme/YYImage#installation", __FUNCTION__, __LINE__);
+        NSLog(@"-[%s: %d] WebP is not available, check the documentation to see how to install WebP component: https://github.com/ibireme/YYImage#installation", __FUNCTION__, __LINE__);
         return nil;
     }
 #endif
