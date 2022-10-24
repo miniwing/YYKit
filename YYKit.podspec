@@ -31,7 +31,8 @@ Pod::Spec.new do |s|
 
   s.pod_target_xcconfig             = {
     'GCC_PREPROCESSOR_DEFINITIONS'      => [
-                                            'MODULE=\"YYKit\"'
+                                              ' MODULE=\"YYKit\" ',
+                                              ' BUNDLE=\"YYKit\" '
                                             ]
                                       }
 
