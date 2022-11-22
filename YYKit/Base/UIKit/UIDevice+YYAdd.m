@@ -22,6 +22,95 @@
 
 YYSYNTH_DUMMY_CLASS(UIDevice_YYAdd)
 
+NS_INLINE float cpuAppUsage() {
+   
+   kern_return_t            kr               = KERN_SUCCESS;
+   task_info_data_t         tinfo            = {0};
+   mach_msg_type_number_t   task_info_count  = {0};
+   
+   task_info_count = TASK_INFO_MAX;
+   kr = task_info(mach_task_self(), TASK_BASIC_INFO, (task_info_t)tinfo, &task_info_count);
+   if (kr != KERN_SUCCESS) {
+      
+      return -1;
+   }
+   
+   task_basic_info_t        basic_info       = {0};
+   thread_array_t           thread_list      = {0};
+   mach_msg_type_number_t   thread_count     = {0};
+   
+   thread_info_data_t       thinfo           = {0};
+   mach_msg_type_number_t   thread_info_count= {0};
+   
+   thread_basic_info_t      basic_info_th    = {0};
+   uint32_t                 stat_thread      = 0; // Mach threads
+   
+   basic_info = (task_basic_info_t)tinfo;
+   
+   // get threads in the task
+   kr = task_threads(mach_task_self(), &thread_list, &thread_count);
+   if (kr != KERN_SUCCESS) {
+      return -1;
+   }
+   if (thread_count > 0) {
+      stat_thread += thread_count;
+   }
+   
+   long   tot_sec    = 0;
+   long   tot_usec   = 0;
+   float  tot_cpu    = 0;
+   
+   for (int j = 0; j < thread_count; j++) {
+      
+      thread_info_count = THREAD_INFO_MAX;
+      kr = thread_info(thread_list[j], THREAD_BASIC_INFO,
+                       (thread_info_t)thinfo, &thread_info_count);
+      if (kr != KERN_SUCCESS) {
+         return -1;
+      }
+      
+      basic_info_th = (thread_basic_info_t)thinfo;
+      
+      if (!(basic_info_th->flags & TH_FLAGS_IDLE)) {
+         tot_sec = tot_sec + basic_info_th->user_time.seconds + basic_info_th->system_time.seconds;
+         tot_usec = tot_usec + basic_info_th->user_time.microseconds + basic_info_th->system_time.microseconds;
+         tot_cpu = tot_cpu + basic_info_th->cpu_usage / (float)TH_USAGE_SCALE * 1.0;
+      }
+      
+   } // for each thread
+   
+   kr = vm_deallocate(mach_task_self(), (vm_offset_t)thread_list, thread_count * sizeof(thread_t));
+   assert(kr == KERN_SUCCESS);
+   
+//   app_cpu = tot_cpu;
+   return tot_cpu;
+}
+
+NS_INLINE float cpuSystemUsage() {
+
+   static host_cpu_load_info_data_t  previous_info = {0};
+
+   kern_return_t                     kr            = KERN_SUCCESS;
+   mach_msg_type_number_t            count         = HOST_CPU_LOAD_INFO_COUNT;
+   host_cpu_load_info_data_t         info          = {0};
+   
+//   count = HOST_CPU_LOAD_INFO_COUNT;
+   
+   kr = host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO, (host_info_t)&info, &count);
+   if (kr != KERN_SUCCESS) {
+      return -1;
+   }
+   
+   natural_t user   = info.cpu_ticks[CPU_STATE_USER]   - previous_info.cpu_ticks[CPU_STATE_USER];
+   natural_t nice   = info.cpu_ticks[CPU_STATE_NICE]   - previous_info.cpu_ticks[CPU_STATE_NICE];
+   natural_t system = info.cpu_ticks[CPU_STATE_SYSTEM] - previous_info.cpu_ticks[CPU_STATE_SYSTEM];
+   natural_t idle   = info.cpu_ticks[CPU_STATE_IDLE]   - previous_info.cpu_ticks[CPU_STATE_IDLE];
+   natural_t total  = user + nice + system + idle;
+      
+   previous_info    = info;
+   
+   return (user + nice + system) * 1.0 / total;
+}
 
 @implementation UIDevice (YYAdd)
 
@@ -466,18 +555,26 @@ static yy_net_interface_counter yy_get_net_interface_counter() {
 }
 
 - (NSArray *)cpuUsagePerProcessor {
-    processor_info_array_t _cpuInfo, _prevCPUInfo = nil;
+   
+    processor_info_array_t _cpuInfo = nil;
     mach_msg_type_number_t _numCPUInfo, _numPrevCPUInfo = 0;
     unsigned _numCPUs;
-    NSLock *_cpuUsageLock;
-    
+    static NSLock                *_cpuUsageLock = nil;
+    static processor_info_array_t _prevCPUInfo  = nil;
+
     int _mib[2U] = { CTL_HW, HW_NCPU };
     size_t _sizeOfNumCPUs = sizeof(_numCPUs);
     int _status = sysctl(_mib, 2U, &_numCPUs, &_sizeOfNumCPUs, NULL, 0U);
-    if (_status)
+   
+    if (_status) {
         _numCPUs = 1;
+    }
     
-    _cpuUsageLock = [[NSLock alloc] init];
+   if (nil == _cpuUsageLock) {
+      
+       _cpuUsageLock = [[NSLock alloc] init];
+
+   } /* End if () */
     
     natural_t _numCPUsU = 0U;
     kern_return_t err = host_processor_info(mach_host_self(), PROCESSOR_CPU_LOAD_INFO, &_numCPUsU, &_cpuInfo, &_numCPUInfo);
@@ -497,6 +594,8 @@ static yy_net_interface_counter yy_get_net_interface_counter() {
             } else {
                 _inUse = _cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_USER] + _cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_SYSTEM] + _cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_NICE];
                 _total = _inUse + _cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_IDLE];
+               
+                _prevCPUInfo   = _cpuInfo;
             }
             [cpus addObject:@(_inUse / _total)];
         }
@@ -510,6 +609,165 @@ static yy_net_interface_counter yy_get_net_interface_counter() {
     } else {
         return nil;
     }
+}
+
+- (float)cpuSystemUsageEx {
+   
+   kern_return_t                     kr            = KERN_SUCCESS;
+   mach_msg_type_number_t            count         = HOST_CPU_LOAD_INFO_COUNT;
+   static host_cpu_load_info_data_t  previous_info = {0};
+   host_cpu_load_info_data_t         info          = {0};
+   
+//   count = HOST_CPU_LOAD_INFO_COUNT;
+   
+   kr = host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO, (host_info_t)&info, &count);
+   
+   if (kr != KERN_SUCCESS) {
+      
+      return -1;
+   }
+   
+   natural_t user   = info.cpu_ticks[CPU_STATE_USER]   - previous_info.cpu_ticks[CPU_STATE_USER];
+   natural_t nice   = info.cpu_ticks[CPU_STATE_NICE]   - previous_info.cpu_ticks[CPU_STATE_NICE];
+   natural_t system = info.cpu_ticks[CPU_STATE_SYSTEM] - previous_info.cpu_ticks[CPU_STATE_SYSTEM];
+   natural_t idle   = info.cpu_ticks[CPU_STATE_IDLE]   - previous_info.cpu_ticks[CPU_STATE_IDLE];
+   natural_t total  = user + nice + system + idle;
+      
+   LogDebug((@"-[UIDevice systemCpuUsage]1 : user:%d + nice:%d + system:%d + idle:%d",
+             info.cpu_ticks[CPU_STATE_USER],
+             info.cpu_ticks[CPU_STATE_NICE],
+             info.cpu_ticks[CPU_STATE_SYSTEM],
+             info.cpu_ticks[CPU_STATE_USER]));
+  
+   LogDebug((@"-[UIDevice systemCpuUsage]2 : user:%d + nice:%d + system:%d + idle:%d",
+             previous_info.cpu_ticks[CPU_STATE_USER],
+             previous_info.cpu_ticks[CPU_STATE_NICE],
+             previous_info.cpu_ticks[CPU_STATE_SYSTEM],
+             previous_info.cpu_ticks[CPU_STATE_USER]));
+
+//   LogDebug((@"-[UIDevice systemCpuUsage] : user:%d + nice:%d + system:%d + total:%d +++ %.2f%%", user, nice, system, total, (user + nice + system) * 100.0 / total));
+
+#if __Debug__
+   if (0 == total) {
+      
+      total = total;
+      
+   } /* End if () */
+#endif /* __Debug__ */
+//   memcpy(&previous_info, &info, sizeof(host_cpu_load_info_data_t));
+   previous_info  = info;
+
+   return (user + nice + system) * 1.0 / total;
+}
+
+- (float)cpuSystemUsage {
+   
+   return cpuSystemUsage();
+}
+
+- (float)cpuAppUsageEx {
+   
+    kern_return_t kr;
+    task_info_data_t tinfo;
+    mach_msg_type_number_t task_info_count;
+    
+    task_info_count = TASK_INFO_MAX;
+    kr = task_info(mach_task_self(), TASK_BASIC_INFO, (task_info_t)tinfo, &task_info_count);
+    if (kr != KERN_SUCCESS) {
+        return -1;
+    }
+    
+    task_basic_info_t      basic_info;
+    thread_array_t         thread_list;
+    mach_msg_type_number_t thread_count;
+    
+    thread_info_data_t     thinfo;
+    mach_msg_type_number_t thread_info_count;
+    
+    thread_basic_info_t basic_info_th;
+    uint32_t stat_thread = 0; // Mach threads
+    
+    basic_info = (task_basic_info_t)tinfo;
+    
+    // get threads in the task
+    kr = task_threads(mach_task_self(), &thread_list, &thread_count);
+    if (kr != KERN_SUCCESS) {
+        return -1;
+    }
+    if (thread_count > 0)
+        stat_thread += thread_count;
+    
+    long tot_sec = 0;
+    long tot_usec = 0;
+    float tot_cpu = 0;
+    int j;
+    
+    for (j = 0; j < thread_count; j++)
+    {
+        thread_info_count = THREAD_INFO_MAX;
+        kr = thread_info(thread_list[j], THREAD_BASIC_INFO,
+                         (thread_info_t)thinfo, &thread_info_count);
+        if (kr != KERN_SUCCESS) {
+            return -1;
+        }
+        
+        basic_info_th = (thread_basic_info_t)thinfo;
+        
+        if (!(basic_info_th->flags & TH_FLAGS_IDLE)) {
+            tot_sec = tot_sec + basic_info_th->user_time.seconds + basic_info_th->system_time.seconds;
+            tot_usec = tot_usec + basic_info_th->user_time.microseconds + basic_info_th->system_time.microseconds;
+            tot_cpu = tot_cpu + basic_info_th->cpu_usage / (float)TH_USAGE_SCALE;
+        }
+        
+    } // for each thread
+    
+    kr = vm_deallocate(mach_task_self(), (vm_offset_t)thread_list, thread_count * sizeof(thread_t));
+    assert(kr == KERN_SUCCESS);
+    
+//    app_cpu = tot_cpu;
+    return tot_cpu;
+}
+
+- (float)cpuAppUsage {
+   
+   return cpuAppUsage();
+}
+
+NS_INLINE BOOL __CanGetSysCtlBySpecifier(char* specifier, size_t *size) {
+   
+    if (!specifier || strlen(specifier) == 0 || sysctlbyname(specifier, NULL, size, NULL, 0) == -1 || *size == -1) {
+       
+        return NO;
+    }
+   
+    return YES;
+}
+
+NS_INLINE uint64_t __GetSysCtl64BySpecifier(char* specifier) {
+    
+    uint64_t val = 0;
+    size_t size = sizeof(val);
+    
+    if (!__CanGetSysCtlBySpecifier(specifier, &size)) {
+        return -1;
+    }
+    
+    if (sysctlbyname(specifier, &val, &size, NULL, 0) == -1)
+    {
+        return -1;
+    }
+    
+    return val;
+}
+
+- (NSUInteger)cpuMinFrequency {
+   
+   return __GetSysCtl64BySpecifier("hw.cpufrequency_min");
+}
+
+- (NSUInteger)cpuMaxFrequency {
+   
+   return __GetSysCtl64BySpecifier("hw.cpufrequency_max");
 }
 
 @end

@@ -164,8 +164,16 @@ typedef NS_OPTIONS(NSUInteger, YYNetworkTrafficType) {
 /// Current CPU usage, 1.0 means 100%. (-1 when error occurs)
 @property (nonatomic, readonly) float cpuUsage;
 
+/// Current CPU usage for current App, 1.0 means 100%. (-1 when error occurs)
+@property (nonatomic, readonly) float cpuAppUsage;
+@property (nonatomic, readonly) float cpuSystemUsage;
+
 /// Current CPU usage per processor (array of NSNumber), 1.0 means 100%. (nil when error occurs)
 @property (nullable, nonatomic, readonly) NSArray<NSNumber *> *cpuUsagePerProcessor;
+
+@property (nonatomic, readonly) NSUInteger cpuMaxFrequency;
+
+@property (nonatomic, readonly) NSUInteger cpuMinFrequency;
 
 @end
 
