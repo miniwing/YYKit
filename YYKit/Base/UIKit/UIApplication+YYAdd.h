@@ -22,13 +22,29 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSURL *documentsURL;
 @property (nonatomic, readonly) NSString *documentsPath;
 
+@property (nonatomic, readonly, class) NSURL *documentsURL;
+@property (nonatomic, readonly, class) NSString *documentsPath;
+
 /// "Caches" folder in this app's sandbox.
 @property (nonatomic, readonly) NSURL *cachesURL;
 @property (nonatomic, readonly) NSString *cachesPath;
 
+@property (nonatomic, readonly, class) NSURL *cachesURL;
+@property (nonatomic, readonly, class) NSString *cachesPath;
+
 /// "Library" folder in this app's sandbox.
 @property (nonatomic, readonly) NSURL *libraryURL;
 @property (nonatomic, readonly) NSString *libraryPath;
+
+@property (nonatomic, readonly, class) NSURL *libraryURL;
+@property (nonatomic, readonly, class) NSString *libraryPath;
+
+/// "Application Support" folder in this app's sandbox.
+@property (nonatomic, readonly) NSURL *applicationSupportURL;
+@property (nonatomic, readonly) NSString *applicationSupportPath;
+
+@property (nonatomic, readonly, class) NSURL *applicationSupportURL;
+@property (nonatomic, readonly, class) NSString *applicationSupportPath;
 
 /// Application's Bundle Name (show in SpringBoard).
 @property (nullable, nonatomic, readonly) NSString *appBundleName;

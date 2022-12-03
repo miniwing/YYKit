@@ -33,33 +33,71 @@ YYSYNTH_DUMMY_CLASS(UIApplication_YYAdd)
 @implementation UIApplication (YYAdd)
 
 - (NSURL *)documentsURL {
-    return [[[NSFileManager defaultManager]
-             URLsForDirectory:NSDocumentDirectory
-             inDomains:NSUserDomainMask] lastObject];
+    return [UIApplication documentsURL];
 }
 
 - (NSString *)documentsPath {
+   return [UIApplication documentsPath];
+}
+
++ (NSURL *)documentsURL {
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                   inDomains:NSUserDomainMask] lastObject];
+}
+
++ (NSString *)documentsPath {
     return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
 }
 
 - (NSURL *)cachesURL {
-    return [[[NSFileManager defaultManager]
-             URLsForDirectory:NSCachesDirectory
-             inDomains:NSUserDomainMask] lastObject];
+   return [UIApplication cachesURL];
 }
 
 - (NSString *)cachesPath {
+   return [UIApplication cachesPath];
+}
+
++ (NSURL *)cachesURL {
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory
+                                                   inDomains:NSUserDomainMask] lastObject];
+}
+
++ (NSString *)cachesPath {
     return [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
 }
 
 - (NSURL *)libraryURL {
-    return [[[NSFileManager defaultManager]
-             URLsForDirectory:NSLibraryDirectory
-             inDomains:NSUserDomainMask] lastObject];
+   return [UIApplication libraryURL];
 }
 
 - (NSString *)libraryPath {
+   return [UIApplication libraryPath];
+}
+
++ (NSURL *)libraryURL {
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory
+                                                   inDomains:NSUserDomainMask] lastObject];
+}
+
++ (NSString *)libraryPath {
     return [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
+}
+
+- (NSURL *)applicationSupportURL {
+   return [UIApplication applicationSupportURL];
+}
+
+- (NSString *)applicationSupportPath {
+   return [UIApplication applicationSupportPath];
+}
+
++ (NSURL *)applicationSupportURL {
+   return [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory
+                                                  inDomains:NSUserDomainMask] lastObject];
+}
+
++ (NSString *)applicationSupportPath {
+    return [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) firstObject];
 }
 
 - (BOOL)isPirated {
