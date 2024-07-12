@@ -30,15 +30,15 @@ static const int block_key;
 @implementation _YYUIBarButtonItemBlockTarget
 
 - (id)initWithBlock:(void (^)(id sender))block{
-    self = [super init];
-    if (self) {
-        _block = [block copy];
-    }
-    return self;
+   self = [super init];
+   if (self) {
+      _block = [block copy];
+   }
+   return self;
 }
 
 - (void)invoke:(id)sender {
-    if (self.block) self.block(sender);
+   if (self.block) self.block(sender);
 }
 
 @end
@@ -47,16 +47,16 @@ static const int block_key;
 @implementation UIBarButtonItem (YYAdd)
 
 - (void)setActionBlock:(void (^)(id sender))block {
-    _YYUIBarButtonItemBlockTarget *target = [[_YYUIBarButtonItemBlockTarget alloc] initWithBlock:block];
-    objc_setAssociatedObject(self, &block_key, target, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    
-    [self setTarget:target];
-    [self setAction:@selector(invoke:)];
+   _YYUIBarButtonItemBlockTarget *target = [[_YYUIBarButtonItemBlockTarget alloc] initWithBlock:block];
+   objc_setAssociatedObject(self, &block_key, target, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+   
+   [self setTarget:target];
+   [self setAction:@selector(invoke:)];
 }
 
 - (void (^)(id)) actionBlock {
-    _YYUIBarButtonItemBlockTarget *target = objc_getAssociatedObject(self, &block_key);
-    return target.block;
+   _YYUIBarButtonItemBlockTarget *target = objc_getAssociatedObject(self, &block_key);
+   return target.block;
 }
 
 @end

@@ -22,19 +22,19 @@
 @implementation NSObject (YYAddForARC)
 
 - (instancetype)arcDebugRetain {
-    return [self retain];
+   return [self retain];
 }
 
 - (oneway void)arcDebugRelease {
-    [self release];
+   [self release];
 }
 
 - (instancetype)arcDebugAutorelease {
-    return [self autorelease];
+   return [self autorelease];
 }
 
 - (NSUInteger)arcDebugRetainCount {
-    return [self retainCount];
+   return [self retainCount];
 }
 
 @end
