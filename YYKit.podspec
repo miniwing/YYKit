@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.homepage            = "https://github.com/ibireme/YYKit"
   s.license             = "MIT"
   s.author              = { "Harry" => "miniwing.hz@gmail.com" }
-  s.platform            = :ios, "10.0"
+  s.platform            = :ios, "12.0"
 
 #  s.source              = { "git": "https://github.com/ibireme/YYKit.git" }
   s.source              = { :path => "." }
