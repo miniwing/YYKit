@@ -333,7 +333,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #else // TARGET_INTERFACE_BUILDER
-IB_DESIGNABLE
+//IB_DESIGNABLE
 @interface YYLabel : UIView <NSCoding>
 @property (nullable, nonatomic, copy) IBInspectable NSString *text;
 @property (null_resettable, nonatomic, strong) IBInspectable UIColor *textColor;
