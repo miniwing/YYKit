@@ -11,7 +11,7 @@
 
 #import <Foundation/Foundation.h>
 
-#if __has_include(<YYKit/YYKit.h>)
+#if __has_include(<YYKit/YYKit-umbrella.h>)
 
 FOUNDATION_EXPORT double YYKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char YYKitVersionString[];

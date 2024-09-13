@@ -178,20 +178,20 @@ Pod::Spec.new do |s|
 
 /******************************************************************************************************/
 
-#if __has_include(<FoundationExtension/FoundationExtension.h>)
+#if __has_include(<FoundationExtension/FoundationExtension-umbrella.h>)
 #  import <FoundationExtension/FoundationExtension.h>
 #  define FOUNDATION_EXTENSION                                          (1)
-#elif __has_include("FoundationExtension/FoundationExtension.h")
+#elif __has_include("FoundationExtension/FoundationExtension-umbrella.h")
 #  import "FoundationExtension/FoundationExtension.h"
 #  define FOUNDATION_EXTENSION                                          (1)
 #else
 #  define FOUNDATION_EXTENSION                                          (0)
 #endif
 
-#if __has_include(<UIKitExtension/UIKitExtension.h>)
+#if __has_include(<UIKitExtension/UIKitExtension-umbrella.h>)
 #  import <UIKitExtension/UIKitExtension.h>
 #  define UI_KIT_EXTENSION                                              (1)
-#elif __has_include("UIKitExtension/UIKitExtension.h")
+#elif __has_include("UIKitExtension/UIKitExtension-umbrella.h")
 #  import "UIKitExtension/UIKitExtension.h"
 #  define UI_KIT_EXTENSION                                              (1)
 #else

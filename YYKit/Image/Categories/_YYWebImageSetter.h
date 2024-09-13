@@ -9,7 +9,7 @@
 //  LICENSE file in the root directory of this source tree.
 //
 
-#if __has_include(<YYKit/YYKit.h>)
+#if __has_include(<YYKit/YYKit-umbrella.h>)
 #import <YYKit/YYWebImageManager.h>
 #else
 #import "YYWebImageManager.h"

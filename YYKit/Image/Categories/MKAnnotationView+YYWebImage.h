@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 
-#if __has_include(<YYKit/YYKit.h>)
+#if __has_include(<YYKit/YYKit-umbrella.h>)
 #import <YYKit/YYWebImageManager.h>
 #else
 #import "YYWebImageManager.h"

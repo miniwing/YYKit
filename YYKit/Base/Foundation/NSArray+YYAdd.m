@@ -9,9 +9,9 @@
 //  LICENSE file in the root directory of this source tree.
 //
 
-#if __has_include(<FoundationExtension/FoundationExtension.h>)
+#if __has_include(<FoundationExtension/FoundationExtension-umbrella.h>)
 #  import <FoundationExtension/FoundationExtension.h>
-#endif /* !__has_include(<FoundationExtension/FoundationExtension.h>) */
+#endif /* !__has_include(<FoundationExtension/FoundationExtension-umbrella.h>) */
 
 #import "NSArray+YYAdd.h"
 #import "YYKitMacro.h"
@@ -45,7 +45,7 @@ YYSYNTH_DUMMY_CLASS(NSArray_YYAdd)
    return nil;
 }
 
-#if __has_include(<FoundationExtension/FoundationExtension.h>)
+#if __has_include(<FoundationExtension/FoundationExtension-umbrella.h>)
 #else
 - (id)randomObject {
    if (self.count) {
@@ -53,7 +53,7 @@ YYSYNTH_DUMMY_CLASS(NSArray_YYAdd)
    }
    return nil;
 }
-#endif /* !__has_include(<FoundationExtension/FoundationExtension.h>) */
+#endif /* !__has_include(<FoundationExtension/FoundationExtension-umbrella.h>) */
 
 - (id)objectOrNilAtIndex:(NSUInteger)index {
    return index < self.count ? self[index] : nil;
@@ -169,7 +169,7 @@ YYSYNTH_DUMMY_CLASS(NSArray_YYAdd)
    }
 }
 
-#if __has_include(<FoundationExtension/FoundationExtension.h>)
+#if __has_include(<FoundationExtension/FoundationExtension-umbrella.h>)
 #else
 - (void)shuffle {
    for (NSUInteger i = self.count; i > 1; i--) {
@@ -177,6 +177,6 @@ YYSYNTH_DUMMY_CLASS(NSArray_YYAdd)
                 withObjectAtIndex:arc4random_uniform((u_int32_t)i)];
    }
 }
-#endif /* !__has_include(<FoundationExtension/FoundationExtension.h>) */
+#endif /* !__has_include(<FoundationExtension/FoundationExtension-umbrella.h>) */
 
 @end

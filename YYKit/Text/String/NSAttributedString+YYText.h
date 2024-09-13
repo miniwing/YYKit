@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreText/CoreText.h>
 
-#if __has_include(<YYKit/YYKit.h>)
+#if __has_include(<YYKit/YYKit-umbrella.h>)
 #import <YYKit/YYTextAttribute.h>
 #import <YYKit/YYTextRubyAnnotation.h>
 #else

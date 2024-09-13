@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 
-#if __has_include(<YYKit/YYKit.h>)
+#if __has_include(<YYKit/YYKit-umbrella.h>)
 #import <YYKit/YYTextMagnifier.h>
 #import <YYKit/YYTextSelectionView.h>
 #else
